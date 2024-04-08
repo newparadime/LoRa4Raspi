@@ -8,18 +8,13 @@ SOURCE_DIR:=$(realpath src)
 LIBRARY_DIR:=$(realpath lib)
 EXAMPLE_DIR:=$(realpath examples)
 
-PREFIX?=/usr/local/
-DESTDIR?=
-LIBRARY_INSTALL_DIR=$(DESTDIR)/$(PREFIX)/lib
-INTERFACE_INSTALL_DIR=$(DESTDIR)/$(PREFIX)/include
-
 SOURCE_FILES:=$(wildcard $(SOURCE_DIR)/*.cpp)
 INTERFACE_FILES:=$(wildcard $(INTERFACE_DIR)/*.h*)
 OBJECT_FILES=$(SOURCE_FILES:$(SOURCE_DIR)/%.cpp=$(OBJECT_DIR)/%.o)
 EXAMPLES=$(wildcard $(EXAMPLE_DIR)/*/.)
 CLEAN_EXAMPLES=$(EXAMPLES:%=%!clean)
 
-TRIPLET=arm-linux-gnueabihf
+TRIPLET?=arm-linux-gnueabihf
 CXX:=$(TRIPLET)-$(CXX)
 CC:=$(TRIPLET)-$(CC)
 AR:=$(TRIPLET)-$(AR)
@@ -27,6 +22,11 @@ LD:=$(TRIPLET)-$(LD)
 CXXFLAGS+=-I$(INTERFACE_DIR) -Wall -Werror -std=gnu++11 -O1 -fPIC
 LDFLAGS+=-shared
 LDLIBS=-lwiringPi
+
+PREFIX?=/usr/local/$(TRIPLET)
+DESTDIR?=
+LIBRARY_INSTALL_DIR=$(DESTDIR)/$(PREFIX)/lib
+INTERFACE_INSTALL_DIR=$(DESTDIR)/$(PREFIX)/include
 
 .PHONY: default lib examples all clean $(EXAMPLES) $(CLEAN_EXAMPLES)
 

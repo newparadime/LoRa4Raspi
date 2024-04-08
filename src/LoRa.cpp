@@ -237,7 +237,7 @@ bool LoRaClass::isTransmitting()
 }
 
 
-int LoRaClass::parsePacket(int size)
+int LoRaClass::parsePacket(int size=0)
 {
   int packetLength = 0;
   int irqFlags = readRegister(REG_IRQ_FLAGS);
@@ -270,11 +270,11 @@ int LoRaClass::parsePacket(int size)
 
   } else {
     if (readRegister(REG_OP_MODE) != (MODE_LONG_RANGE_MODE | MODE_RX_SINGLE)) {
-    // not currently in RX mode
-    // reset FIFO address
-    writeRegister(REG_FIFO_ADDR_PTR, 0);
-    // put in single RX mode
-    writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_RX_SINGLE);
+      // not currently in RX mode
+      // reset FIFO address
+      writeRegister(REG_FIFO_ADDR_PTR, 0);
+      // put in single RX mode
+      writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_RX_SINGLE);
     }
   }
 
