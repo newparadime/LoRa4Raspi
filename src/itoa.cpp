@@ -21,12 +21,12 @@
 extern "C" {
 #endif
 
-extern char* itoa( int value, char *string, int radix )
+char* itoa( int value, char *string, int radix )
 {
   return ltoa( value, string, radix ) ;
 }
 
-extern char* ltoa( long value, char *string, int radix )
+char* ltoa( long value, char *string, int radix )
 {
   char tmp[33];
   char *tp = tmp;
@@ -76,12 +76,12 @@ extern char* ltoa( long value, char *string, int radix )
   return string;
 }
 
-extern char* utoa( unsigned int value, char *string, int radix )
+char* utoa( unsigned int value, char *string, int radix )
 {
   return ultoa( value, string, radix ) ;
 }
 
-extern char* ultoa( unsigned long value, char *string, int radix )
+char* ultoa( unsigned long value, char *string, int radix )
 {
   char tmp[33];
   char *tp = tmp;
@@ -121,7 +121,7 @@ extern char* ultoa( unsigned long value, char *string, int radix )
 
 
 char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
-  asm(".global _printf_float");
+  //asm(".global _printf_float");
 
   char fmt[20];
   sprintf(fmt, "%%%d.%df", width, prec);

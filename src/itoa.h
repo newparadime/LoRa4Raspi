@@ -19,13 +19,12 @@
 extern "C"{
 #endif
 
-//extern void itoa( int n, char s[] ) ;
+char* itoa( int value, char *string, int radix ) ;
+char* ltoa( long value, char *string, int radix ) ;
+char* utoa( unsigned int value, char *string, int radix ) ;
+char* ultoa( unsigned long value, char *string, int radix ) ;
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout);
 
-extern char* itoa( int value, char *string, int radix ) ;
-extern char* ltoa( long value, char *string, int radix ) ;
-extern char* utoa( unsigned int value, char *string, int radix ) ;
-extern char* ultoa( unsigned long value, char *string, int radix ) ;
-extern char *dtostrf (double val, signed char width, unsigned char prec, char *sout);
 #ifdef __cplusplus
 } // extern "C"
 #endif

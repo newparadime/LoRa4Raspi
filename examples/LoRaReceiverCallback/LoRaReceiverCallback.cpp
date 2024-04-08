@@ -1,5 +1,6 @@
 #include "LoRa.h"
 #include <stdio.h>
+#include <unistd.h>
 
 void onReceive(int packetSize) {
   // received a packet
@@ -42,7 +43,7 @@ void setup() {
 
 void loop() {
 // just waiting onReceive callback; nothing done here
-sleep(60000);
+  sleep(60);
 }
 
 
