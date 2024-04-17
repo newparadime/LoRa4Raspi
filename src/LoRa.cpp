@@ -76,21 +76,43 @@ using namespace std;
 
 
 __inline__ int INTERRUPTS_ENABLED(void) {
-    int res;
+  int res;
+  #ifdef __arm__
     __asm__ __volatile__("mrs %[res], CPSR": [res] "=r" (res)::);
-    return ((res >> 7) & 1) == 0;
+  #elif defined(__aarch64__)
+    __asm__ __volatile__("mrs %[res], DAIF": [res] "=r" (res)::);
+  #else
+    #error "LoRa only builds for ARM 32 and 64 bit"
+  #endif
+  __asm__ __volatile__("isb");
+  
+  return ((res >> 7) & 1) == 0;
 }
 
 __inline__ void ENABLE_INTERRUPTS(void) {
-    if (!INTERRUPTS_ENABLED()) {
-        __asm__ __volatile__("cpsie i");
-    }
+  if (!INTERRUPTS_ENABLED()) {
+    #ifdef __arm__
+      __asm__ __volatile__("cpsie i");
+    #elif defined(__aarch64__)
+      __asm__ __volatile__("msr DAIFClr, #2");
+    #else
+      #error "LoRa only builds for ARM 32 and 64 bit"
+    #endif
+    __asm__ __volatile__("isb");
+  }
 }
 
 __inline__ void DISABLE_INTERRUPTS(void) {
-    if (INTERRUPTS_ENABLED()) {
-        __asm__ __volatile__("cpsid i");
-    }
+  if (INTERRUPTS_ENABLED()) {
+    #ifdef __arm__
+      __asm__ __volatile__("cpsid i");
+    #elif defined(__aarch64__)
+      __asm__ __volatile__("msr DAIFSet, #2");
+      __asm__ __volatile__("isb");
+    #else
+      #error "LoRa only builds for ARM 32 and 64 bit"
+    #endif
+  }
 }
 
 LoRaClass::LoRaClass() :
@@ -109,37 +131,37 @@ LoRaClass::LoRaClass() :
 
 int LoRaClass::begin(long frequency, int SPI)
 {
-   wiringPiSetup();
-   _spi = SPI;
+  wiringPiSetup();
+  _spi = SPI;
  
-   // configure DIO0
-    pinMode(_dio0, INPUT);
-    pullUpDnControl (_dio0, PUD_DOWN) ;
+  // configure DIO0
+  pinMode(_dio0, INPUT);
+  pullUpDnControl (_dio0, PUD_DOWN) ;
 
-    //configure SS
-    pinMode(_ss, OUTPUT);
-    digitalWrite(_ss, HIGH);
+  //configure SS
+  pinMode(_ss, OUTPUT);
+  digitalWrite(_ss, HIGH);
 
-    //configure & perform reset
- if (_reset != -1) {
+  //configure & perform reset
+  if (_reset != -1) {
     pinMode(_reset, OUTPUT);
     digitalWrite(_reset, LOW);
     delay(10);
     digitalWrite(_reset, HIGH);
     delay(10);
- }
+  }
 
-// Create a spi connection  (default 1 Mhz)
+  // Create a spi connection  (default 1 Mhz)
   if (wiringPiSPISetupMode (_spi, _spi_frequency, 0) < 0)
   {
     fprintf (stderr, "Unable to open SPI device 0: %s\n", strerror (errno)) ;
     exit (1) ;
   }
 
-// check version
+  // check version
   uint8_t version = readRegister(REG_VERSION); 
    
-   if (version != 0x12) {
+  if (version != 0x12) {
     return 0;
   }
 

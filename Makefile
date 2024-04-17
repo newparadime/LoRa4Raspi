@@ -2,11 +2,11 @@ LIBRARY_NAME=lora
 
 PROJECT_ROOT:=$(shell pwd)
 
-INTERFACE_DIR:=$(realpath interface)
-OBJECT_DIR:=$(realpath obj)
-SOURCE_DIR:=$(realpath src)
-LIBRARY_DIR:=$(realpath lib)
-EXAMPLE_DIR:=$(realpath examples)
+INTERFACE_DIR:=$(abspath interface)
+OBJECT_DIR:=$(abspath obj)
+SOURCE_DIR:=$(abspath src)
+LIBRARY_DIR:=$(abspath lib)
+EXAMPLE_DIR:=$(abspath examples)
 
 SOURCE_FILES:=$(wildcard $(SOURCE_DIR)/*.cpp)
 INTERFACE_FILES:=$(wildcard $(INTERFACE_DIR)/*.h*)
@@ -61,7 +61,7 @@ $(LIBRARY_DIR)/lib$(LIBRARY_NAME).a: $(OBJECT_FILES)
 
 $(LIBRARY_DIR)/lib$(LIBRARY_NAME).so: $(OBJECT_FILES)
 	mkdir -p $(@D)
-	$(CXX) $(LDFLAGS) $^ -o $@
+	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(EXAMPLES): $(LIBRARY_DIR)/lib$(LIBRARY_NAME).so
 	$(MAKE) -C $@ PROJECT_ROOT=$(PROJECT_ROOT)
