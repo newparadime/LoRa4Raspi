@@ -237,7 +237,7 @@ bool LoRaClass::isTransmitting()
 }
 
 
-int LoRaClass::parsePacket(int size=0)
+int LoRaClass::parsePacket(int size)
 {
   int packetLength = 0;
   int irqFlags = readRegister(REG_IRQ_FLAGS);

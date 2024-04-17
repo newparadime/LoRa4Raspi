@@ -19,7 +19,7 @@ CXX:=$(TRIPLET)-$(CXX)
 CC:=$(TRIPLET)-$(CC)
 AR:=$(TRIPLET)-$(AR)
 LD:=$(TRIPLET)-$(LD)
-CXXFLAGS+=-I$(INTERFACE_DIR) -Wall -Werror -std=gnu++11 -O1 -fPIC
+CXXFLAGS+=-I$(INTERFACE_DIR) -Wall -Werror -std=gnu++14 -O1 -fPIC
 LDFLAGS+=-shared
 LDLIBS=-lwiringPi
 
