@@ -80,11 +80,10 @@ __inline__ int INTERRUPTS_ENABLED(void) {
   #ifdef __arm__
     __asm__ __volatile__("mrs %[res], CPSR": [res] "=r" (res)::);
   #elif defined(__aarch64__)
-    __asm__ __volatile__("mrs %[res], DAIF": [res] "=r" (res)::);
+    __asm__ __volatile__("mrs %0, DAIF" : "=r"(res));
   #else
     #error "LoRa only builds for ARM 32 and 64 bit"
   #endif
-  __asm__ __volatile__("isb");
   
   return ((res >> 7) & 1) == 0;
 }
@@ -775,23 +774,23 @@ void LoRaClass::writeRegister(uint8_t address, uint8_t value)
 
 uint8_t LoRaClass::singleTransfer(uint8_t address, uint8_t value)
 {
-   uint8_t buf[2];
-   buf[0] = address;
-   buf[1] = value;
-   
-    digitalWrite(_ss, LOW);
-
-    DISABLE_INTERRUPTS();
+  uint8_t buf[2];
+  buf[0] = address;
+  buf[1] = value;
   
-    wiringPiSPIDataRW (_spi, buf, 2) ;
- 
-    ENABLE_INTERRUPTS();
+  digitalWrite(_ss, LOW);
 
-    uint8_t response = buf[1];
+  DISABLE_INTERRUPTS();
 
-    digitalWrite(_ss, HIGH);
-    
-   return response;
+  wiringPiSPIDataRW (_spi, buf, 2) ;
+
+  ENABLE_INTERRUPTS();
+
+  uint8_t response = buf[1];
+
+  digitalWrite(_ss, HIGH);
+  
+  return response;
 }
 
 ISR_PREFIX void LoRaClass::onDio0Rise()

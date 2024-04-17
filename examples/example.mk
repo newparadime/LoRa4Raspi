@@ -1,22 +1,22 @@
 BINARY_NAME=$(notdir $(shell pwd))
 
-PROJECT_ROOT?=../..
+PROJECT_ROOT?=$(abspath ../..)
 INCLUDE_DIRS=$(PROJECT_ROOT)/interface
-OBJECT_DIR=obj
-SOURCE_DIR=.
-LIBRARY_DIR=$(PROJECT_ROOT)/lib
-BINARY_DIR=$(PROJECT_ROOT)/bin
+OBJECT_DIR=$(abspath obj)
+SOURCE_DIR=$(abspath .)
+LIBRARY_DIR?=$(PROJECT_ROOT)/lib
+BINARY_DIR?=$(PROJECT_ROOT)/bin
 
-SOURCE_FILES:=$(wildcard $(SOURCE_DIR)/*.cpp)
+SOURCE_FILES=$(wildcard $(SOURCE_DIR)/*.cpp)
 OBJECT_FILES=$(SOURCE_FILES:$(SOURCE_DIR)/%.cpp=$(OBJECT_DIR)/%.o)
 
-TRIPLET=arm-linux-gnueabihf
-CXX:=$(TRIPLET)-$(CXX)
-CC:=$(TRIPLET)-$(CC)
-LD:=$(TRIPLET)-$(LD)
+TRIPLET?=arm-linux-gnueabihf
+CXX=$(TRIPLET)-$(CXX)
+CC=$(TRIPLET)-$(CC)
+LD=$(TRIPLET)-$(LD)
 CXXFLAGS+=$(INCLUDE_DIRS:%=-I%) -Wall -Werror -std=gnu++11 -O1 -fPIC
-LDFLAGS=-L$(LIBRARY_DIR)
-LDLIBS=-llora -lwiringPi
+LDFLAGS+=-L$(LIBRARY_DIR)
+LDLIBS+=-llora -lwiringPi
 
 .PHONY: default all clean
 
