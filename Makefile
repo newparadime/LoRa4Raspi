@@ -44,10 +44,12 @@ clean: $(CLEAN_EXAMPLES)
 install: install_libs install_headers
 
 install_headers: $(INTERFACE_FILES)
+	@echo "Installing headers to $(INTERFACE_INSTALL_DIR) ..."
 	mkdir -p $(INTERFACE_INSTALL_DIR)
 	cp $^ $(INTERFACE_INSTALL_DIR)
 
 install_libs: $(LIBRARY_DIR)/lib$(LIBRARY_NAME).a $(LIBRARY_DIR)/lib$(LIBRARY_NAME).so
+	@echo "Installing libraries to $(LIBRARY_INSTALL_DIR) ..."
 	mkdir -p $(LIBRARY_INSTALL_DIR)
 	cp $^ $(LIBRARY_INSTALL_DIR)
 
