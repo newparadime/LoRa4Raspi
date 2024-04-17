@@ -11,9 +11,9 @@ SOURCE_FILES=$(wildcard $(SOURCE_DIR)/*.cpp)
 OBJECT_FILES=$(SOURCE_FILES:$(SOURCE_DIR)/%.cpp=$(OBJECT_DIR)/%.o)
 
 TRIPLET?=arm-linux-gnueabihf
-CXX=$(TRIPLET)-$(CXX)
-CC=$(TRIPLET)-$(CC)
-LD=$(TRIPLET)-$(LD)
+CXX:=$(TRIPLET)-$(CXX)
+CC:=$(TRIPLET)-$(CC)
+LD:=$(TRIPLET)-$(LD)
 CXXFLAGS+=$(INCLUDE_DIRS:%=-I%) -Wall -Werror -std=gnu++11 -O1 -fPIC
 LDFLAGS+=-L$(LIBRARY_DIR)
 LDLIBS+=-llora -lwiringPi
